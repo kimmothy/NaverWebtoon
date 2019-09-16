@@ -45,16 +45,20 @@ def getRGBArray(imgsrc):
     return hist_bgr
 
 # NaWebCrolling.py를 사용해 수집해놓은 웹툰 썸네일 이미지 로드
+# 중간 if 문은 cv2.imrad가 gif 파일을 읽어오지 못하기때문에, 통과하도록 한 것
+# gif파일을 jpg로 인코딩후 실생하면 모든 이미지 분석 가능
 toons = []
 for i in range(2,837):
     img = cv2.imread('C:\python_data\\webtoon\\imgs\\'+str(i)+'.jpg', cv2.IMREAD_COLOR)
+    if img is None:
+        continue
     hist = getRGBArray(img)
     t = toon(i,hist)
     toons.append(t)
 
 # 이 이하는 k-means기법을 사용해 웹툰 분류, k 변수는 분류할 클러스터의 갯수
 k = 5
-centerIndex = random.sample(range(0,835),k)
+centerIndex = random.sample(range(0,len(toons)),k)
 centers = []
 for i in centerIndex:
     centers.append(toons[i].hist)
@@ -86,7 +90,6 @@ for i in range(len(clusters)):
         toonName = ws[nameCell].value
         clusterNames = clusterNames + toonName + " "
     print(clusterNames)
-
 
 for i in range(len(clusters)):
     for t in clusters[i]:

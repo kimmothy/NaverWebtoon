@@ -3,7 +3,8 @@ import openpyxl as op
 from openpyxl import Workbook
 import urllib.request
 import re
-
+from webdriver_manager.chrome import ChromeDriverManager
+import os
 
 # 장르별 분류로 들어가 각 웹툰의 장르 가져오는 함수
 # 첫번째 반복문은 장르별로 제시된 웹툰들의 이름을 가져온다
@@ -62,7 +63,7 @@ def makeExcel():
     ws['A1'] = '이름'
     ws['B1'] = '작가'
     ws['C1'] = '별점'
-    wb.save('C:\python_data\\webtoon\\webtooninfo.xlsx')
+    wb.save('C:\python_data\webtoon\webtooninfo.xlsx')
     wb.close()
 
 # selenium의 태그 객체(각 웹툰 정보 부분)을 받아, 썸네일이미지를 다운로드하고, 이름, 작가 별점을 엑셀에 저장
@@ -85,7 +86,7 @@ def getInfos(toon):
         index.append(toon_name)
         num += 1
 
-browser = webdriver.Chrome('C:\python_data\chromedriver_win32\chromedriver.exe')
+browser = webdriver.Chrome(ChromeDriverManager().install())
 
 baseurl = 'https://comic.naver.com/webtoon/weekdayList.nhn?week='
 browser.implicitly_wait(3)
@@ -95,6 +96,12 @@ index=[]
 
 makeExcel()
 num = 2
+
+if not (os.path.isdir('C:\python_data\webtoon')):
+    os.makedirs('C:\python_data\webtoon')
+
+if not (os.path.isdir('C:\python_data\webtoon\imgs')):
+    os.makedirs('C:\python_data\webtoon\imgs')
 
 for i in weekdays:
     browser.get(baseurl + i)

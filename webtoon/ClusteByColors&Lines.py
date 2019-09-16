@@ -61,8 +61,13 @@ def getColors(imgsrc):
 
 toons =[]
 
+# NaWebCrolling.py를 사용해 수집해놓은 웹툰 썸네일 이미지 로드
+# 중간 if 문은 cv2.imrad가 gif 파일을 읽어오지 못하기때문에, 통과하도록 한 것
+# gif파일을 jpg로 인코딩후 실생하면 모든 이미지 분석 가능
 for i in range(2,837):
     img = cv2.imread('C:\python_data\\webtoon\\imgs\\'+str(i)+'.jpg', cv2.IMREAD_COLOR)
+    if img is None:
+        continue
     colors = getColors(img)
     lines = getLines(img)
     t = toon(i,lines,colors)
@@ -77,19 +82,20 @@ for t in toons:
 allLines.sort()
 allColors.sort()
 
+toonNum = len(toons)
 AverageLine = 0
 for i in allLines:
     AverageLine += i
-AverageLine = AverageLine//835
+AverageLine = AverageLine//toonNum
 
 AverageColor = 0
 for i in allColors:
     AverageColor += i
-AverageColor = AverageColor//835
+AverageColor = AverageColor//toonNum
 print("선 통계")
-print("Max:",str(allLines[834]),"Min:",str(allLines[0]),"Average:",AverageLine, "Quarter:",str(allLines[835//4]),"mid:",str(allLines[835//2]),"3Quarter:",str(allLines[835//4*3]),sep=" ")
+print("Max:",str(allLines[toonNum-1]),"Min:",str(allLines[0]),"Average:",AverageLine, "Quarter:",str(allLines[toonNum//4]),"mid:",str(allLines[toonNum//2]),"3Quarter:",str(allLines[toonNum//4*3]),sep=" ")
 print("색 통계")
-print("Max:",str(allColors[834]),"Min:",str(allColors[0]),"Average:",AverageColor, "Quarter:",str(allColors[835//4]),"mid:",str(allColors[835//2]),"3Quarter:",str(allColors[835//4*3]),sep=" ")
+print("Max:",str(allColors[toonNum-1]),"Min:",str(allColors[0]),"Average:",AverageColor, "Quarter:",str(allColors[toonNum//4]),"mid:",str(allColors[toonNum//2]),"3Quarter:",str(allColors[toonNum//4*3]),sep=" ")
 
 # 이 이하는 k-means기법을 사용해 웹툰 분류, k 변수는 분류할 클러스터의 갯수
 k = 5
