@@ -135,7 +135,7 @@ for i in range(len(clusters)):
         clusterNames = clusterNames + toonName + " "
     print(clusterNames)
 
-
+ws["E1"] = "색&선의 수로 클러스터"
 for i in range(len(clusters)):
     for t in clusters[i]:
         index = 'E' + str(t.num)

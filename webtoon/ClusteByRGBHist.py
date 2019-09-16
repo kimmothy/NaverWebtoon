@@ -91,6 +91,7 @@ for i in range(len(clusters)):
         clusterNames = clusterNames + toonName + " "
     print(clusterNames)
 
+ws["E1"] = "색의 분포로 클러스터"
 for i in range(len(clusters)):
     for t in clusters[i]:
         index = 'F' + str(t.num)
